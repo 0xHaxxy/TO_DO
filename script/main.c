@@ -1,18 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
-// argv is a char pointer because it doesn't store the char[] directly but only there addresses.
-// so doing this char *b[]={"haha", "hoho", "hihi"} ==> the array b[] stores the addresses of each char[] which are : haha, hoho, hihi
-// if we do b[1] ===> it returns ==> hoho;
+typedef struct
+{    
+   char name[100];
+    char description[300];
+    char date[20];
+    int priority;
+    int status; // 0 = pending, 1 = completed
+}TASKMANAGER;
 
-int main(int argc, char *argv[])
+int main(void)
 {
-    if (strcmp(argv[1], "add") == 0) {printf("You entered add command.\n");}
-    else if (strcmp(argv[1], "list") == 0) {printf("You entered list command.\n");} 
-    else if (strcmp(argv[1], "done") == 0) {printf("You entered done command.\n");}
-    else if (strcmp(argv[1], "del") == 0) {printf("You entered del command.\n");} 
-    else {printf("INVALID COMMAND\n");}
+    while(1) {
+        // Display the main menu and get user input
+        printf("----- Task Manager Menu -----\n");
+        printf("1. Show all Tasks\n");
+        printf("2. Show Pending Tasks\n");
+        printf("3. Show Completed Tasks\n");
+        printf("4. Add Task\n");
+        printf("5. Delete Task\n");
+        printf("6. Complete Task\n");
+        printf("7. Exit\n");
+        printf("Choose an option: ");
+        scanf("%i", &choice);
+        getchar(); // Clear newline character left in the input buffer
     
+
     return 0;
 }
