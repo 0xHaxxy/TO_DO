@@ -19,7 +19,7 @@ int main(void)
     // Index is used when modifying or deleting a task
     // found is a flag used for checking if any matching tasks exist
 
-    int numTasks=0, maxTasks=30, choice, Index, found=0;
+    int numTasks=0, maxTasks=20, choice, Index, found=0;
     TASKMANAGER tasks[maxTasks]; // Array of taskManager structs to store the tasks
 
     while(1) {
@@ -36,6 +36,7 @@ int main(void)
         printf("Choose an option: ");
         scanf("%d", &choice); 
         getchar(); // Clear newline character left in the input buffer
+        puts(" \n");
 
         switch (choice) 
         {
@@ -45,13 +46,13 @@ int main(void)
                         { 
                             for (int i = 0; i < numTasks; i++)
                             {
-                                printf("ask %d :  \t", i + 1);
+                                printf("TASK %d :  \t", i + 1);
                                 printf("Name : %s\t", tasks[i].name);
                                 printf("Description :  %s\t", tasks[i].description);
                                 printf("date :  %s\t", tasks[i].date);
                                 printf("status :  %s\n",tasks[i].status == 0 ? "pending" : "done");
                             }
-                        } break;
+                        }  puts(" \n"); break;
 
             case 2 : //show pending tasks
                         int counter = 0;
@@ -74,7 +75,7 @@ int main(void)
                         break;
             
             case 3 : // show completed task
-                        int counter = 0;
+                        int found = 0;
                         for (int i = 0; i< numTasks ; i++)
                         {
                             if(tasks[i].status == 1)
@@ -83,18 +84,45 @@ int main(void)
                                     printf("Name : %s\t", tasks[i].name);
                                     printf("Description :  %s\t", tasks[i].description);
                                     printf("date :  %s\t", tasks[i].date);
-                                    counter ++;
+                                    found ++;
                                 }
                         } 
-                        if (counter == 0)
+                        if (found == 0)
                           {
                              puts("No task done yet \n");
                              break;
                           }
-                        break;   
-                          
+                        break;  
+
+            case 4:  // Add a new task to the list
+                    if (numTasks>=maxTasks) {
+                        printf("Task list is full!\n");
+                        break;
+                    } else {
+
+                        // [ ] stores all the user input
+                        // %[ ] tells  scanf to read only the typed character inside the square brackets
+                        //  ^ inside squarre brackets means "except"
+                        // \n refers to new line.
+
+                        printf("Enter task name: ");      
+                        scanf(" %[^\n]", tasks[numTasks].name);
+                        getchar(); // Clear newline character left in the input buffer
+                        printf("Enter task description: ");
+                        scanf(" %[^\n]", tasks[numTasks].description);
+                        getchar(); 
+                        printf("Enter task date (YYYY-MM-DD): ");
+                        scanf(" %[^\n]", tasks[numTasks].date);
+                        getchar(); // 
+                        tasks[numTasks].status = 0; // When adding a task, it's marked as pending by default
+                        numTasks++;
+                        puts(" .... \n");
+                        printf("Task added successfully!\n");
+                    }
+                    break;             
             
             default :
+                puts("... \n");
                 puts("WARNING, INVALID CHOICE\n");
                 break;
         }
