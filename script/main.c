@@ -73,6 +73,27 @@ int main(void)
                           }
                         break;
             
+            case 3 : // show completed task
+                        int counter = 0;
+                        for (int i = 0; i< numTasks ; i++)
+                        {
+                            if(tasks[i].status == 1)
+                                {
+                                    printf("ask %d :  \t", i + 1);
+                                    printf("Name : %s\t", tasks[i].name);
+                                    printf("Description :  %s\t", tasks[i].description);
+                                    printf("date :  %s\t", tasks[i].date);
+                                    counter ++;
+                                }
+                        } 
+                        if (counter == 0)
+                          {
+                             puts("No task done yet \n");
+                             break;
+                          }
+                        break;   
+                          
+            
             default :
                 puts("WARNING, INVALID CHOICE\n");
                 break;
