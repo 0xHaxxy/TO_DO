@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+ 
 
 typedef struct
 {    
@@ -11,6 +12,35 @@ typedef struct
     int status; // 0 = pending, 1 = completed
 }TASKMANAGER;
 
+void showTasks(int numTasks, TASKMANAGER tasks[])
+{
+     if (numTasks == 0){printf("No task avalaible.\n");}
+                        else
+                        { 
+                            for (int i = 0; i < numTasks; i++)
+                            {
+                                printf("TASK %d :  \t", i + 1);
+                                printf("Name : %s\t", tasks[i].name);
+                                printf("Description :  %s\t", tasks[i].description);
+                                printf("date :  %s\t", tasks[i].date);
+                                printf("status :  %s\n",tasks[i].status == 0 ? "pending" : "done");
+                            }
+                        }  puts(" \n");
+}
+
+void deleteTask(TASKMANAGER tasks[], char key[], int *n)
+{
+    int index = 0;
+
+    while(strcmp(key, tasks[index].name) != 0 && index < 20) index++ ;// to get the index of the target
+
+    //starting from the target index
+    for (int i = index; i < *n-1; i++){tasks[i]=tasks[i+1];}
+
+    //reducing the size of the array
+    (*n)--;
+}
+
 int main(void)
 {
     // numTasks tracks the current number of tasks
@@ -19,7 +49,7 @@ int main(void)
     // Index is used when modifying or deleting a task
     // found is a flag used for checking if any matching tasks exist
 
-    int numTasks=0, maxTasks=20, choice, Index, found=0;
+    int numTasks=0, choice, maxTasks = 20, Index, found=0;
     TASKMANAGER tasks[maxTasks]; // Array of taskManager structs to store the tasks
 
     while(1) {
@@ -34,25 +64,19 @@ int main(void)
         printf("6. Complete Task\n");
         printf("7. Exit\n");
         printf("Choose an option: ");
-        scanf("%d", &choice); 
-        getchar(); // Clear newline character left in the input buffer
+        while(scanf("%d", &choice) != 1)
+        {
+            int c = 0;
+            while ((c = getchar()) != '\n' && c != EOF)
+            ;printf("wrong format, try again : ");
+        };
+        getchar(); 
         puts(" \n");
 
         switch (choice) 
         {
             case 1 :    //show all task
-                        if (numTasks == 0){printf("No task avalaible.\n");}
-                        else
-                        { 
-                            for (int i = 0; i < numTasks; i++)
-                            {
-                                printf("TASK %d :  \t", i + 1);
-                                printf("Name : %s\t", tasks[i].name);
-                                printf("Description :  %s\t", tasks[i].description);
-                                printf("date :  %s\t", tasks[i].date);
-                                printf("status :  %s\n",tasks[i].status == 0 ? "pending" : "done");
-                            }
-                        }  puts(" \n"); break;
+                    showTasks(numTasks, &tasks[0]); break;
 
             case 2 : //show pending tasks
                         int counter = 0;
@@ -60,10 +84,10 @@ int main(void)
                         {
                             if(tasks[i].status == 0)
                                 {
-                                    printf("ask %d :  \t", i + 1);
+                                    printf("Task %d :  \t", i + 1);
                                     printf("Name : %s\t", tasks[i].name);
                                     printf("Description :  %s\t", tasks[i].description);
-                                    printf("date :  %s\t", tasks[i].date);
+                                    printf("date :  %s\n", tasks[i].date);
                                     counter ++;
                                 }
                         } 
@@ -72,6 +96,7 @@ int main(void)
                              puts("No pending task\n");
                              break;
                           }
+                        puts(" \n");
                         break;
             
             case 3 : // show completed task
@@ -80,10 +105,10 @@ int main(void)
                         {
                             if(tasks[i].status == 1)
                                 {
-                                    printf("ask %d :  \t", i + 1);
+                                    printf("Tsk %d :  \t", i + 1);
                                     printf("Name : %s\t", tasks[i].name);
                                     printf("Description :  %s\t", tasks[i].description);
-                                    printf("date :  %s\t", tasks[i].date);
+                                    printf("date :  %s\n", tasks[i].date);
                                     found ++;
                                 }
                         } 
@@ -91,7 +116,7 @@ int main(void)
                           {
                              puts("No task done yet \n");
                              break;
-                          }
+                          } puts(" \n");
                         break;  
 
             case 4:  // Add a new task to the list
@@ -119,9 +144,33 @@ int main(void)
                         puts(" .... \n");
                         printf("Task added successfully!\n");
                     }
-                    break;             
+                    break;      
+                    
+            case 5 :
+                    char key[100];
+                    int count=0;
+                    showTasks(numTasks, &tasks[0]); 
+                    printf("insert the name of the task you want to delete :  ");
+                    scanf("%99[^\n]", &key[0]);
+
+                    for(int i=0; i < maxTasks; i++)
+                    {
+                        if (strcmp(key, tasks[i].name) == 0)
+                        {
+                            deleteTask(tasks, &key[0], &numTasks);
+                            break;
+                        }
+                        else
+                            count++;
+                            continue;
+                    } 
+                    if(count == numTasks)
+                    { 
+                        puts("No task matches your choice\n");
+                    }
+                    break;         
             
-            default :
+             default :
                 puts("... \n");
                 puts("WARNING, INVALID CHOICE\n");
                 break;
