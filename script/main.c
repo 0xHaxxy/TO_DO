@@ -41,6 +41,21 @@ void deleteTask(TASKMANAGER tasks[], char key[], int *n)
     (*n)--;
 }
 
+void showCompleteTask(TASKMANAGER tasks[], int numTasks)
+{
+
+    for (int i = 0; i< numTasks ; i++)
+    {
+        if(tasks[i].status == 1)
+        {
+            printf("Tsk %d :  \t", i + 1);
+            printf("Name : %s\t", tasks[i].name);
+            printf("Description :  %s\t", tasks[i].description);
+            printf("date :  %s\n", tasks[i].date);
+        }
+    } 
+}
+
 int main(void)
 {
     // numTasks tracks the current number of tasks
@@ -64,13 +79,12 @@ int main(void)
         printf("6. Complete Task\n");
         printf("7. Exit\n");
         printf("Choose an option: ");
-        while(scanf("%d", &choice) != 1)
+        while(scanf(" %d", &choice) != 1)
         {
             int c = 0;
             while ((c = getchar()) != '\n' && c != EOF)
             ;printf("wrong format, try again : ");
         };
-        getchar(); 
         puts(" \n");
 
         switch (choice) 
@@ -100,24 +114,8 @@ int main(void)
                         break;
             
             case 3 : // show completed task
-                        int found = 0;
-                        for (int i = 0; i< numTasks ; i++)
-                        {
-                            if(tasks[i].status == 1)
-                                {
-                                    printf("Tsk %d :  \t", i + 1);
-                                    printf("Name : %s\t", tasks[i].name);
-                                    printf("Description :  %s\t", tasks[i].description);
-                                    printf("date :  %s\n", tasks[i].date);
-                                    found ++;
-                                }
-                        } 
-                        if (found == 0)
-                          {
-                             puts("No task done yet \n");
-                             break;
-                          } puts(" \n");
-                        break;  
+                        showCompleteTask(tasks, numTasks);
+                        break;
 
             case 4:  // Add a new task to the list
                     if (numTasks>=maxTasks) {
@@ -151,13 +149,14 @@ int main(void)
                     int count=0;
                     showTasks(numTasks, &tasks[0]); 
                     printf("insert the name of the task you want to delete :  ");
-                    scanf("%99[^\n]", &key[0]);
+                    scanf("  %99[^\n]", &key[0]);
 
                     for(int i=0; i < maxTasks; i++)
                     {
                         if (strcmp(key, tasks[i].name) == 0)
                         {
                             deleteTask(tasks, &key[0], &numTasks);
+                            printf("Task deleted successfully\n");
                             break;
                         }
                         else
@@ -168,7 +167,40 @@ int main(void)
                     { 
                         puts("No task matches your choice\n");
                     }
-                    break;         
+                    break;
+
+            case 6 :    // mark as completed.
+           
+            char mark[100];
+                    int c=0;
+                    showTasks(numTasks, &tasks[0]); 
+                    printf("insert the name of the task you want to mark as completed :  ");
+                    scanf("  %99[^\n]", &mark[0]);
+
+                    for(int i=0; i < maxTasks; i++)
+                    {
+                        if (strcmp(mark, tasks[i].name) == 0 && tasks[i].status == 0)
+                        {
+                            tasks[i].status = 1;
+                            printf("valeur de status : %d\n", tasks[i].status);
+                            printf("Task completed successfully\n");
+                            break;
+                        }
+                        else
+                            c++;
+                            continue;
+                    } 
+                    if(c == numTasks)
+                    { 
+                        puts("The task may be already completed or the input was incorrect\n");
+                    }
+                    break;
+
+                    
+
+            case 7 :
+                    puts("leaving .....");
+                    exit(1);
             
              default :
                 puts("... \n");
